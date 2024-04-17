@@ -1,16 +1,27 @@
-# This is a sample Python script.
+import ping3
+import time
+import subprocess
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+# Задайте адрес сервера для пинга
+server_address = 'ya.ru'
 
+# Задайте время ожидания перед перезагрузкой
+timeout = 60 # секунд
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+# Функция для выполнения пинга
+def check_ping():
+ ping_result = ping3.ping(server_address)
+ if ping_result.success:
+   print("Сервер доступен")
+ else:
+   print("Сервер недоступен")
 
+# Основной цикл
+while True:
+ check_ping()
+ time.sleep(timeout)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+# Если сервер недоступен в течение timeout секунд, перезагружаем сервер
+if not ping_result.success:
+ print("Сервер недоступен более timeout секунд, перезагружаю сервер")
+ subprocess.call('shutdown', '-r', 'now')
